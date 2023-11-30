@@ -1,88 +1,64 @@
-from abc import ABC, abstractmethod
+from datetime import datetime
 
-class Szoba(ABC):
+class Szoba:
     def __init__(self, ar, szobaszam):
         self.ar = ar
         self.szobaszam = szobaszam
 
-    @abstractmethod
     def info(self):
-        pass
+        return f"Szoba #{self.szobaszam}, ár: {self.ar} Ft"
 
-class EgyagyasSzoba(Szoba):
-    def __init__(self, szobaszam):
-        super().__init__(15000, szobaszam)
-        self.egyagyas_agy = True
-
-    def info(self):
-        print(f"Egyágyas szoba #{self.szobaszam}, ár: {self.ar} Ft, egyágyas ágy: {self.egyagyas_agy}")
-
-class KetagyasSzoba(Szoba):
-    def __init__(self, szobaszam):
-        super().__init__(25000, szobaszam)
-        self.ketagyas_agy = True
+class Foglalás:
+    def __init__(self, szoba, datum):
+        self.szoba = szoba
+        self.datum = datum
 
     def info(self):
-        print(f"Kétágyas szoba #{self.szobaszam}, ár: {self.ar} Ft, kétágyas ágy: {self.ketagyas_agy}")
+        return f"Foglalás dátuma: {self.datum.strftime('%Y-%m-%d')}\n{self.szoba.info()}"
 
 class Szalloda:
     def __init__(self, nev):
         self.nev = nev
         self.szobak = []
+        self.foglalasok = []
 
     def add_szoba(self, szoba):
         self.szobak.append(szoba)
 
+    def foglalas(self, szoba, datum):
+        foglalas = Foglalás(szoba, datum)
+        self.foglalasok.append(foglalas)
+
+    def foglalas_datum_alapjan(self, datum):
+        foglalt_arak = {}
+        for foglalas in self.foglalasok:
+            if foglalas.datum == datum:
+                szoba = foglalas.szoba
+                foglalt_arak[szoba.szobaszam] = szoba.ar
+        return foglalt_arak
+
     def info(self):
         print(f"{self.nev} szálloda szobái:")
         for szoba in self.szobak:
-            szoba.info()
+            print(szoba.info())
+        print("\nFoglalások:")
+        for foglalas in self.foglalasok:
+            print(foglalas.info())
 
 # Példányosítás és használat
 hotel = Szalloda("Luxury Hotel")
-egyagyas_szoba = EgyagyasSzoba(101)
-ketagyas_szoba = KetagyasSzoba(201)
-
-hotel.add_szoba(egyagyas_szoba)
-hotel.add_szoba(ketagyas_szoba)
-
-from datetime import datetime
-
-class Szoba:
-
-    def __init__(self, ar, szobaszam):
-
-        self.ar = ar
-
-        self.szobaszam = szobaszam
-
-    def info(self):
-
-        return f"Szoba #{self.szobaszam}, ár: {self.ar} Ft"
-
-class Foglalás:
-    def __init__(self, szoba, datum):
-
-        self.szoba = szoba
-
-        self.datum = datum
-
-    def info(self):
-
-        return f"Foglalás dátuma: {self.datum.strftime('%Y-%m-%d')}\n{self.szoba.info()}"
-
-
-
 szoba1 = Szoba(15000, 101)
-
 szoba2 = Szoba(25000, 201)
 
-foglalas1 = Foglalás(szoba1, datetime(2023, 12, 1))
+hotel.add_szoba(szoba1)
+hotel.add_szoba(szoba2)
 
-foglalas2 = Foglalás(szoba2, datetime(2023, 12, 2))
+hotel.foglalas(szoba1, datetime(2023, 12, 1))
+hotel.foglalas(szoba2, datetime(2023, 12, 2))
+hotel.foglalas(szoba1, datetime(2023, 12, 1))  # Még egy példa foglalás ugyanarra a dátumra
 
-print(foglalas1.info())
+# Foglalások lekérdezése dátum alapján
+foglalt_arak = hotel.foglalas_datum_alapjan(datetime(2023, 12, 1))
+print(f"Foglalt árak a 2023-12-1 dátumra: {foglalt_arak}")
 
-print()
-
-print(foglalas2.info())
+hotel.info()
