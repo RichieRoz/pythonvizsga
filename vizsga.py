@@ -26,8 +26,24 @@ class Szalloda:
         self.szobak.append(szoba)
 
     def foglalas(self, szoba, datum):
-        foglalas = Foglalás(szoba, datum)
-        self.foglalasok.append(foglalas)
+        # Ellenőrzés: Dátum érvényessége (jövőbeni)
+        if datum < datetime.now():
+            print("Hibás dátum. Kérlek, adj meg egy jövőbeni dátumot.")
+            return
+
+        # Ellenőrzés: Szoba elérhetősége a megadott dátumon
+        foglalhato = True
+        for foglalas in self.foglalasok:
+            if foglalas.szoba == szoba and foglalas.datum == datum:
+                foglalhato = False
+                break
+
+        if foglalhato:
+            foglalas = Foglalás(szoba, datum)
+            self.foglalasok.append(foglalas)
+            print("Foglalás sikeresen hozzáadva.")
+        else:
+            print("Ez a szoba már foglalt ezen a dátumon.")
 
     def foglalas_datum_alapjan(self, datum):
         foglalt_arak = {}
@@ -64,7 +80,7 @@ class Szalloda:
             print(foglalas.info())
 
 def main():
-    hotel = Szalloda(" Hotel ")
+    hotel = Szalloda("Hotel")
     szoba1 = Szoba(15000, 101)
     szoba2 = Szoba(25000, 201)
 
@@ -89,7 +105,6 @@ def main():
             szoba = next((szoba for szoba in hotel.szobak if szoba.szobaszam == int(szobaszam)), None)
             if szoba:
                 hotel.foglalas(szoba, datum)
-                print("Foglalás sikeresen hozzáadva.")
             else:
                 print("Hibás szoba szám.")
 
@@ -102,9 +117,7 @@ def main():
             szoba = next((szoba for szoba in hotel.szobak if szoba.szobaszam == int(szobaszam)), None)
             if szoba:
                 lemondas_sikeres = hotel.foglalas_lemondas(szoba, datum)
-                if lemondas_sikeres:
-                    print("Foglalás sikeresen lemondva.")
-                else:
+                if not lemondas_sikeres:
                     print("Nincs ilyen foglalás ezen a dátumon és szobaszámon.")
             else:
                 print("Hibás szoba szám.")
