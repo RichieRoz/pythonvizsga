@@ -63,19 +63,61 @@ class Szalloda:
         for foglalas in self.foglalasok:
             print(foglalas.info())
 
-# Példányosítás és használat
-hotel = Szalloda("Hotel")
-szoba1 = Szoba(15000, 101)
-szoba2 = Szoba(25000, 201)
+def main():
+    hotel = Szalloda(" Hotel ")
+    szoba1 = Szoba(15000, 101)
+    szoba2 = Szoba(25000, 201)
 
-hotel.add_szoba(szoba1)
-hotel.add_szoba(szoba2)
+    hotel.add_szoba(szoba1)
+    hotel.add_szoba(szoba2)
 
-hotel.foglalas(szoba1, datetime(2023, 12, 1))
-hotel.foglalas(szoba2, datetime(2023, 12, 2))
-hotel.foglalas(szoba1, datetime(2023, 12, 3))
+    while True:
+        print("\nVálassz műveletet:")
+        print("1. Foglalás")
+        print("2. Lemondás")
+        print("3. Foglalások listázása")
+        print("4. Kilépés")
 
-# Foglalások listázása
-hotel.listaz_foglalasok()
+        valasztas = input("Választásod: ")
 
-hotel.info()
+        if valasztas == "1":
+            szobaszam = input("Add meg a szoba számát: ")
+            datum_str = input("Add meg a foglalás dátumát (YYYY-MM-DD): ")
+            datum = datetime.strptime(datum_str, "%Y-%m-%d")
+
+            # Szoba és foglalás hozzáadása
+            szoba = next((szoba for szoba in hotel.szobak if szoba.szobaszam == int(szobaszam)), None)
+            if szoba:
+                hotel.foglalas(szoba, datum)
+                print("Foglalás sikeresen hozzáadva.")
+            else:
+                print("Hibás szoba szám.")
+
+        elif valasztas == "2":
+            szobaszam = input("Add meg a lemondandó foglalás szoba számát: ")
+            datum_str = input("Add meg a lemondandó foglalás dátumát (YYYY-MM-DD): ")
+            datum = datetime.strptime(datum_str, "%Y-%m-%d")
+
+            # Foglalás lemondása
+            szoba = next((szoba for szoba in hotel.szobak if szoba.szobaszam == int(szobaszam)), None)
+            if szoba:
+                lemondas_sikeres = hotel.foglalas_lemondas(szoba, datum)
+                if lemondas_sikeres:
+                    print("Foglalás sikeresen lemondva.")
+                else:
+                    print("Nincs ilyen foglalás ezen a dátumon és szobaszámon.")
+            else:
+                print("Hibás szoba szám.")
+
+        elif valasztas == "3":
+            hotel.listaz_foglalasok()
+
+        elif valasztas == "4":
+            print("Kilépés.")
+            break
+
+        else:
+            print("Érvénytelen választás. Kérem, válassz újra.")
+
+if __name__ == "__main__":
+    main()
