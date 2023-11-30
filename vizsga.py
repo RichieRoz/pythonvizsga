@@ -49,28 +49,40 @@ hotel.add_szoba(ketagyas_szoba)
 from datetime import datetime
 
 class Szoba:
+
     def __init__(self, ar, szobaszam):
+
         self.ar = ar
+
         self.szobaszam = szobaszam
 
     def info(self):
+
         return f"Szoba #{self.szobaszam}, ár: {self.ar} Ft"
 
 class Foglalás:
     def __init__(self, szoba, datum):
+
         self.szoba = szoba
+
         self.datum = datum
 
     def info(self):
+
         return f"Foglalás dátuma: {self.datum.strftime('%Y-%m-%d')}\n{self.szoba.info()}"
 
-# Példányosítás és használat
+
+
 szoba1 = Szoba(15000, 101)
+
 szoba2 = Szoba(25000, 201)
 
 foglalas1 = Foglalás(szoba1, datetime(2023, 12, 1))
+
 foglalas2 = Foglalás(szoba2, datetime(2023, 12, 2))
 
 print(foglalas1.info())
+
 print()
+
 print(foglalas2.info())
