@@ -9,26 +9,6 @@ class Szoba(ABC):
     def info(self):
         pass
 
-# Példa leszármazott osztály készítésére
-class StandardSzoba(Szoba):
-    def info(self):
-        print(f"Standard szoba #{self.szobaszam}, ár: {self.ar} Ft")
-
-# Példányosítás és használat
-standard_szoba = StandardSzoba(20000, 101)
-standard_szoba.info()
-
-from abc import ABC, abstractmethod
-
-class Szoba(ABC):
-    def __init__(self, ar, szobaszam):
-        self.ar = ar
-        self.szobaszam = szobaszam
-
-    @abstractmethod
-    def info(self):
-        pass
-
 class EgyagyasSzoba(Szoba):
     def __init__(self, szobaszam):
         super().__init__(15000, szobaszam)
@@ -45,9 +25,25 @@ class KetagyasSzoba(Szoba):
     def info(self):
         print(f"Kétágyas szoba #{self.szobaszam}, ár: {self.ar} Ft, kétágyas ágy: {self.ketagyas_agy}")
 
-# Példányosítás és használat
-egyagyas_szoba = EgyagyasSzoba(201)
-ketagyas_szoba = KetagyasSzoba(302)
+class Szalloda:
+    def __init__(self, nev):
+        self.nev = nev
+        self.szobak = []
 
-egyagyas_szoba.info()
-ketagyas_szoba.info()
+    def add_szoba(self, szoba):
+        self.szobak.append(szoba)
+
+    def info(self):
+        print(f"{self.nev} szálloda szobái:")
+        for szoba in self.szobak:
+            szoba.info()
+
+# Példányosítás és használat
+hotel = Szalloda("Luxury Hotel")
+egyagyas_szoba = EgyagyasSzoba(101)
+ketagyas_szoba = KetagyasSzoba(201)
+
+hotel.add_szoba(egyagyas_szoba)
+hotel.add_szoba(ketagyas_szoba)
+
+hotel.info()
