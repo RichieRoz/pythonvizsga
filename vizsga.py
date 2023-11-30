@@ -50,6 +50,11 @@ class Szalloda:
         else:
             return False
 
+    def listaz_foglalasok(self):
+        print("Foglalások listája:")
+        for foglalas in self.foglalasok:
+            print(foglalas.info())
+
     def info(self):
         print(f"{self.nev} szálloda szobái:")
         for szoba in self.szobak:
@@ -59,24 +64,18 @@ class Szalloda:
             print(foglalas.info())
 
 # Példányosítás és használat
-hotel = Szalloda("Luxury Hotel")
+hotel = Szalloda("Hotel")
 szoba1 = Szoba(15000, 101)
-
 szoba2 = Szoba(25000, 201)
 
 hotel.add_szoba(szoba1)
-
 hotel.add_szoba(szoba2)
 
 hotel.foglalas(szoba1, datetime(2023, 12, 1))
-
 hotel.foglalas(szoba2, datetime(2023, 12, 2))
-
 hotel.foglalas(szoba1, datetime(2023, 12, 3))
 
-# Foglalás lemondása
-lemondas_sikeres = hotel.foglalas_lemondas(szoba1, datetime(2023, 12, 1))
-
-print(f"Foglalás lemondása sikeres: {lemondas_sikeres}")
+# Foglalások listázása
+hotel.listaz_foglalasok()
 
 hotel.info()
