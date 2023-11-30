@@ -155,6 +155,7 @@ def main():
             hotel.listaz_foglalasok()
 
         elif valasztas == "4":
+
             print("Kilépés.")
             break
 
