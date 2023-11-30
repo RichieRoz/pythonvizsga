@@ -1,33 +1,48 @@
 from datetime import datetime
 
 class Szoba:
+
     def __init__(self, ar, szobaszam):
+
         self.ar = ar
+
         self.szobaszam = szobaszam
 
     def info(self):
+
         return f"Szoba #{self.szobaszam}, ár: {self.ar} Ft"
 
 class Foglalás:
+
     def __init__(self, szoba, datum):
+
         self.szoba = szoba
+
         self.datum = datum
 
     def info(self):
+
         return f"Foglalás dátuma: {self.datum.strftime('%Y-%m-%d')}\n{self.szoba.info()}"
 
 class Szalloda:
+
     def __init__(self, nev):
+
         self.nev = nev
+
         self.szobak = []
+
         self.foglalasok = []
 
     def add_szoba(self, szoba):
+
         self.szobak.append(szoba)
 
     def foglalas(self, szoba, datum):
+
         # Ellenőrzés: Dátum érvényessége (jövőbeni)
         if datum < datetime.now():
+
             print("Hibás dátum. Kérlek, adj meg egy jövőbeni dátumot.")
             return
 
@@ -80,13 +95,28 @@ class Szalloda:
         for foglalas in self.foglalasok:
             print(foglalas.info())
 
-def main():
+def initialize_hotel():
     hotel = Szalloda("Hotel")
     szoba1 = Szoba(15000, 101)
     szoba2 = Szoba(25000, 201)
+    szoba3 = Szoba(18000, 301)
 
     hotel.add_szoba(szoba1)
     hotel.add_szoba(szoba2)
+    hotel.add_szoba(szoba3)
+
+    foglalas1 = Foglalás(szoba1, datetime(2023, 12, 1))
+    foglalas2 = Foglalás(szoba2, datetime(2023, 12, 2))
+    foglalas3 = Foglalás(szoba3, datetime(2023, 12, 3))
+    foglalas4 = Foglalás(szoba1, datetime(2023, 12, 4))
+    foglalas5 = Foglalás(szoba2, datetime(2023, 12, 5))
+
+    hotel.foglalasok.extend([foglalas1, foglalas2, foglalas3, foglalas4, foglalas5])
+
+    return hotel
+
+def main():
+    hotel = initialize_hotel()
 
     while True:
         print("\nVálassz műveletet:")
