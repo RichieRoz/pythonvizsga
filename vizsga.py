@@ -54,6 +54,7 @@ class Szalloda:
         return foglalt_arak
 
     def foglalas_lemondas(self, szoba, datum):
+        # Ellenőrzés: Létezik-e a lemondandó foglalás
         lemondando_foglalas = None
         for foglalas in self.foglalasok:
             if foglalas.szoba == szoba and foglalas.datum == datum:
@@ -62,9 +63,9 @@ class Szalloda:
 
         if lemondando_foglalas:
             self.foglalasok.remove(lemondando_foglalas)
-            return True
+            print("Foglalás sikeresen lemondva.")
         else:
-            return False
+            print("Nincs ilyen foglalás ezen a dátumon és szobaszámon.")
 
     def listaz_foglalasok(self):
         print("Foglalások listája:")
@@ -116,9 +117,7 @@ def main():
             # Foglalás lemondása
             szoba = next((szoba for szoba in hotel.szobak if szoba.szobaszam == int(szobaszam)), None)
             if szoba:
-                lemondas_sikeres = hotel.foglalas_lemondas(szoba, datum)
-                if not lemondas_sikeres:
-                    print("Nincs ilyen foglalás ezen a dátumon és szobaszámon.")
+                hotel.foglalas_lemondas(szoba, datum)
             else:
                 print("Hibás szoba szám.")
 
