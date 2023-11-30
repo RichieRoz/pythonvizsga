@@ -158,6 +158,7 @@ def main():
             print("Kilépés.")
             break
 
+
         else:
             print("Érvénytelen választás. Kérem, válassz újra.")
 
