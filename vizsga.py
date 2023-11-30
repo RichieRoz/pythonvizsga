@@ -37,6 +37,19 @@ class Szalloda:
                 foglalt_arak[szoba.szobaszam] = szoba.ar
         return foglalt_arak
 
+    def foglalas_lemondas(self, szoba, datum):
+        lemondando_foglalas = None
+        for foglalas in self.foglalasok:
+            if foglalas.szoba == szoba and foglalas.datum == datum:
+                lemondando_foglalas = foglalas
+                break
+
+        if lemondando_foglalas:
+            self.foglalasok.remove(lemondando_foglalas)
+            return True
+        else:
+            return False
+
     def info(self):
         print(f"{self.nev} szálloda szobái:")
         for szoba in self.szobak:
@@ -48,17 +61,22 @@ class Szalloda:
 # Példányosítás és használat
 hotel = Szalloda("Luxury Hotel")
 szoba1 = Szoba(15000, 101)
+
 szoba2 = Szoba(25000, 201)
 
 hotel.add_szoba(szoba1)
+
 hotel.add_szoba(szoba2)
 
 hotel.foglalas(szoba1, datetime(2023, 12, 1))
-hotel.foglalas(szoba2, datetime(2023, 12, 2))
-hotel.foglalas(szoba1, datetime(2023, 12, 1))  # Még egy példa foglalás ugyanarra a dátumra
 
-# Foglalások lekérdezése dátum alapján
-foglalt_arak = hotel.foglalas_datum_alapjan(datetime(2023, 12, 1))
-print(f"Foglalt árak a 2023-12-1 dátumra: {foglalt_arak}")
+hotel.foglalas(szoba2, datetime(2023, 12, 2))
+
+hotel.foglalas(szoba1, datetime(2023, 12, 3))
+
+# Foglalás lemondása
+lemondas_sikeres = hotel.foglalas_lemondas(szoba1, datetime(2023, 12, 1))
+
+print(f"Foglalás lemondása sikeres: {lemondas_sikeres}")
 
 hotel.info()
